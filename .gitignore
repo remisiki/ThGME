@@ -1,1 +1,6 @@
 .DS_Store
+obj/
+output/
+main
+*.dat
+*.fmt

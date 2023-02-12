@@ -1,14 +1,33 @@
-CC = gcc
+CC      = gcc
 
-.PHONY: clean
+CFLAGS  = -std=c11 -Wconversion -Wall -Werror -Wextra -pedantic
 
-all: ThGME
+LDFLAGS = 
 
-main.o: main.c
-	$(CC) -c $< -o $@	
-ThGME: main.o
-	$(CC) $< -o $@  
-clean: 
-	rm -f *.o ThGME
+TARGET  = main
 
+SRCDIR  = ./src
 
+SRCS    = $(wildcard $(SRCDIR)/*.c)
+
+OBJDIR  = ./obj
+
+OBJS    = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
+
+INCDIR  = 
+
+LIBDIR  = 
+
+LIBS    = -lm
+
+$(TARGET): $(OBJS) $(LIBS)
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	-mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
+
+all: clean $(OBJS) $(TARGET)
+
+clean:
+	-rm -f $(OBJS) $(TARGET) *.d
