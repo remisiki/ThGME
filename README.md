@@ -10,12 +10,18 @@ make
 
 ## Usage
 
-Copy thbgm.dat and thbgm.fmt to the same directory and run
-```bash
-./main
-```
+- If you do not know where `thbgm.fmt` is, first make sure [thtk](https://github.com/thpatch/thtk) is installed, and run
+    ```bash
+    ./run.sh <dir>
+    ```
+    where `<dir>` is path to game files, such as `../\[th12\]\ 東方星蓮船`. This will write outputs to `./output/thxx/`.
 
-Options:
+- If you already have `thbgm.fmt` available, then copy `thbgm.dat` and `thbgm.fmt` to the same directory and run
+    ```bash
+    ./main
+    ```
+
+    Options:
 <table>
   <tr>
     <td><code>-h</code>, <code>--help</code></td>
