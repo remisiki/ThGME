@@ -53,7 +53,6 @@ int extract(char* outputDir) {
   FILE* data = NULL;
   FILE* info = NULL;
   FILE* file = NULL;
-  char* fileName = (char*)malloc(16 * sizeof(char));
   unsigned int introOffset;
   unsigned int introSize;
   unsigned int loopOffset;
@@ -96,15 +95,15 @@ int extract(char* outputDir) {
   fseek(info, 0, SEEK_SET);
 
   while (ftell(info) < infoSize - 52) {
-    fread(fileName, 16, 1, info);
-    char* tmp = (char*)malloc(16 * sizeof(char));
-    strcpy(tmp, outputDir);
-    int len = (int) strlen(outputDir);
-    if (tmp[len - 1] != '/') {
-      tmp[len] = '/';
+    size_t len = strlen(outputDir);
+    char* fileName = (char*)calloc(32+len, sizeof(char));
+    strcpy(fileName, outputDir);
+    if (fileName[len - 1] != '/') {
+      fileName[len] = '/';
     }
-    strcat(tmp, fileName);
-    strcpy(fileName, tmp);
+		char* tmp = (char*)calloc(16, sizeof(char));
+    fread(tmp, 16, 1, info);
+    strcat(fileName, tmp);
     free(tmp);
     fread(&introOffset, 4, 1, info);
     fseek(info, 4, SEEK_CUR);
@@ -171,6 +170,7 @@ int extract(char* outputDir) {
     fwrite(&fileSize, 4, 1, file);  // File size
 
     fclose(file);
+		free(fileName);
 
     printf("Done.\n\n");
   }
@@ -179,8 +179,6 @@ int extract(char* outputDir) {
   fclose(info);
 
   printf("All done.\n");
-
-  free(fileName);
 
   return 0;
 }
